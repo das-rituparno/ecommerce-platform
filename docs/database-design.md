@@ -69,3 +69,23 @@
 | productId | Long |
 | quantity | Integer |
 | price | BigDecimal |
+
+## Entity Relationships
+
+### Category → Product
+
+One category can contain multiple products.
+
+Category 1 -------- * Product
+
+### Cart → CartItem
+
+One cart can contain multiple cart items.
+
+Cart 1 -------- * CartItem
+
+### Order → OrderItem
+
+One order can contain multiple order items.
+
+Order 1 -------- * OrderItem

@@ -71,3 +71,15 @@ GET /api/products/search
 
 ### Example
 GET /api/products/search?name=iphone&categoryId=1&minPrice=50000&maxPrice=100000&page=0&size=10
+
+## Error Response
+All API errors follow a common structure.
+
+```json
+{
+  "timestamp": "2026-09-19T20:00:00",
+  "status": 404,
+  "error": "Product Not Found",
+  "message": "Product with id 999 not found",
+  "path": "/api/products/999"
+}

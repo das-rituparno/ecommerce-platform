@@ -3,6 +3,7 @@ package com.ecommerce.product.service;
 import com.ecommerce.product.dto.CategoryRequest;
 import com.ecommerce.product.dto.CategoryResponse;
 import com.ecommerce.product.entity.Category;
+import com.ecommerce.product.exception.CategoryNotFoundException;
 import com.ecommerce.product.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class CategoryService {
 
     public CategoryResponse getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("category not found"));
+                .orElseThrow(() -> new CategoryNotFoundException(id));
 
         return mapToResponse(category);
     }

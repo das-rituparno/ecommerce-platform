@@ -7,8 +7,17 @@ import com.ecommerce.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.ecommerce.product.dto.ProductPageResponse;
+import com.ecommerce.product.specification.ProductSpecification;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -84,6 +93,38 @@ public class ProductService {
                 .imageUrl(product.getImageUrl())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
+                .build();
+    }
+
+    public ProductPageResponse searchProducts(
+            String name,
+            Long categoryId,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
+            int page,
+            int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productRepository.findAll(
+                ProductSpecification.filterProducts(
+                        name,
+                        categoryId,
+                        minPrice,
+                        maxPrice
+                ), pageable
+        );
+
+        List<ProductResponse> products = productPage.getContent()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+
+        return ProductPageResponse.builder()
+                .content(products)
+                .page(productPage.getNumber())
+                .size(productPage.getSize())
+                .totalElements(productPage.getTotalElements())
+                .totalPages(productPage.getTotalPages())
                 .build();
     }
 }

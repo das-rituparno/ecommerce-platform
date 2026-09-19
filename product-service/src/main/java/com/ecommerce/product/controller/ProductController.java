@@ -1,5 +1,6 @@
 package com.ecommerce.product.controller;
 
+import com.ecommerce.product.dto.ProductPageResponse;
 import com.ecommerce.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -58,5 +60,32 @@ public class ProductController {
         productService.deleteProduct(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ProductPageResponse> searchProducts(
+            @RequestParam(required = false)
+            String name,
+            @RequestParam(required = false)
+            Long categoryId,
+            @RequestParam(required = false)
+            BigDecimal minPrice,
+            @RequestParam(required = false)
+            BigDecimal maxPrice,
+            @RequestParam(defaultValue = "0")
+            int page,
+            @RequestParam(defaultValue = "10")
+            int size) {
+
+        return ResponseEntity.ok(
+                productService.searchProducts(
+                        name,
+                        categoryId,
+                        minPrice,
+                        maxPrice,
+                        page,
+                        size
+                )
+        );
     }
 }
